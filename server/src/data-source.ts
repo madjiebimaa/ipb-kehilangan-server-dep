@@ -4,6 +4,7 @@ import { Post } from "./entities/post.entity";
 import { User } from "./entities/user.entity";
 import { config } from "dotenv";
 import { DataSource } from "typeorm";
+import { Session } from "./entities/session.entity";
 
 config();
 
@@ -17,7 +18,7 @@ export const AppDataSource = new DataSource({
   username: DB_USERNAME,
   password: DB_PASSWORD,
   database: DB_NAME,
-  entities: [User, Post, Item],
+  entities: [User, Post, Item, Session],
   synchronize: true,
   logging: true,
   // subscribers: [],

@@ -37,9 +37,7 @@ export class Post extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToOne(() => Item, (item) => item.post, {
-    cascade: true,
-  })
+  @OneToOne(() => Item)
   @JoinColumn()
   item: Item;
 

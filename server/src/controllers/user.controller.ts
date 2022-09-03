@@ -11,6 +11,6 @@ export async function createUserHandler(
     const user = await createUser(req.body);
     return res.status(StatusCodes.CREATED).send(user);
   } catch (err: any) {
-    return res.status(StatusCodes.CONFLICT).send(err.message);
+    return res.status(StatusCodes.BAD_REQUEST).send({ message: err.message });
   }
 }

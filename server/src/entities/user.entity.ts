@@ -1,3 +1,4 @@
+import { Session } from "./session.entity";
 import config from "config";
 import { nanoid } from "nanoid";
 import { Post } from "./post.entity";
@@ -52,6 +53,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Post, (post) => post.user)
   posts: Post[];
+
+  @OneToMany(() => Session, (session) => session.user)
+  sessions: Session[];
 
   private tempPassword: string;
   @AfterLoad()
