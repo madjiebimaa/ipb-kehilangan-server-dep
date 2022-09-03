@@ -1,9 +1,9 @@
-import { Item } from "./entities/Item";
-import { Post } from "./entities/Post";
 import "reflect-metadata";
+import { Item } from "./entities/item.entity";
+import { Post } from "./entities/post.entity";
+import { User } from "./entities/user.entity";
 import { config } from "dotenv";
 import { DataSource } from "typeorm";
-import { User } from "./entities/User";
 
 config();
 

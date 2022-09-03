@@ -1,4 +1,4 @@
-import { User } from "./User";
+import { User } from "./user.entity";
 import {
   Column,
   Entity,
@@ -8,11 +8,14 @@ import {
   ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
+  BeforeInsert,
+  BaseEntity,
 } from "typeorm";
-import { Item } from "./Item";
+import { Item } from "./item.entity";
+import { nanoid } from "nanoid";
 
-@Entity()
-export class Post {
+@Entity("posts")
+export class Post extends BaseEntity {
   @PrimaryColumn()
   id: string;
 
@@ -42,4 +45,10 @@ export class Post {
 
   @ManyToOne(() => User, (user) => user.posts)
   user: User;
+
+  @BeforeInsert()
+  setId() {
+    const post = this as Post;
+    post.id = nanoid();
+  }
 }
