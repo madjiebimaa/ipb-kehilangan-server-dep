@@ -3,11 +3,11 @@ import { get } from "lodash";
 import { reIssueAccessToken } from "../services/session.service";
 import { verifyJwt } from "../utils/jwt";
 
-export async function deserializeUser(
+export const deserializeUser = async (
   req: Request,
   res: Response,
   next: NextFunction
-) {
+) => {
   const accessToken = get(req, "headers.authorization", "").replace(
     /^Bearer\s/,
     ""
@@ -33,4 +33,4 @@ export async function deserializeUser(
   }
 
   return next();
-}
+};

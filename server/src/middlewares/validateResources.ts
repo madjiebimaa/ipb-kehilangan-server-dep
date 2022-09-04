@@ -8,7 +8,7 @@ export const validateResources =
     try {
       const { body, query, params } = req;
       schema.parse({ body, query, params });
-      next();
+      return next();
     } catch (err: any) {
       return res.status(StatusCodes.BAD_REQUEST).send({ message: err.errors });
     }
