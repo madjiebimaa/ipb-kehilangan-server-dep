@@ -13,7 +13,7 @@ export async function createUser(input: DeepPartial<User>) {
 }
 
 export async function findUser(query: FindOneOptions<User>) {
-  return User.findOne(query);
+  return await User.findOne(query);
 }
 
 export async function validatePassword({
