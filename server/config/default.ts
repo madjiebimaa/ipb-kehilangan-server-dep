@@ -1,27 +1,21 @@
+import { config } from "dotenv";
+
+config();
+
+const {
+  SERVER_PORT,
+  SALT_WORK_FACTOR,
+  ACCESS_TOKEN_TTL,
+  REFRESH_TOKEN_TTL,
+  PRIVATE_KEY,
+  PUBLIC_KEY,
+} = process.env;
+
 export default {
-  port: 3000,
-  saltWorkFactor: 10,
-  accessTokenTtl: "15m",
-  refreshTokenTtl: "1y",
-  publicKey: `-----BEGIN PUBLIC KEY-----
-MIGeMA0GCSqGSIb3DQEBAQUAA4GMADCBiAKBgH/aqeugnybBuVA6b8pFddytjTqW
-mMrx+B4bfpBMvZwuCZVgZzBCugqwEVsvVtxGnz4kZPwjK90UhBYynsmC5ApbMahm
-SNWtrDOhrWNpHNN9IJU/BY3i49gwgTH4A6OL0QpbkxfFY8WUFoegNR4TJdeoqC3o
-5tMwbuF5QhWlKXyXAgMBAAE=
------END PUBLIC KEY-----`,
-  privateKey: `-----BEGIN RSA PRIVATE KEY-----
-MIICXAIBAAKBgH/aqeugnybBuVA6b8pFddytjTqWmMrx+B4bfpBMvZwuCZVgZzBC
-ugqwEVsvVtxGnz4kZPwjK90UhBYynsmC5ApbMahmSNWtrDOhrWNpHNN9IJU/BY3i
-49gwgTH4A6OL0QpbkxfFY8WUFoegNR4TJdeoqC3o5tMwbuF5QhWlKXyXAgMBAAEC
-gYAFFv5mu/k6AMJQ2FK0+bjsdRhHOdGRWrqm8C9ErVlrC0YkZTcWa8GeRU4blDHg
-CQuz3J0MkJXhcjyj6ZX6rbRISgVaFU/3E1/vvAHYCsXe/PxTlqzFFnkgciddA+TI
-HqgSyL1G/23w5XlZyaNrtuSEGLRCEe7sH2TjalbUU+njkQJBAP35BEZ3+wa6Hjbj
-NAGXMp6FNZtbg6XIbyd2nIXjCyUK7/qwNXwm9WK0q2v9kb0KXnvnVENMb3fcM2u0
-hsLUto8CQQCA3+2/ptHizH4FRmcTvALoSkTA9619WxluUmR1MGRBd/RsdWfb1nCt
-+QpShCWSbf6ydWqm+j/G/u1RuUFLfx15AkEAo06lJh7uRlQVK5wLC97KSM5FOyGs
-VES+3LRTT3A/8VDIIP1/VtbCQPcFp0oElXb+bFPChge3QW5Rjjcl1E/tFwJAH3sT
-75IHiThcvFsjSM3PhADIZL7b0VhUkP9tbLcCdn+f5HKViT0Lz2ObYubG6ssVwXAv
-OlS9CZYyUJlJWvDVOQJBAJwAMdByR6KzyYBGbsA5RMvcisztiw2jJgjBME/IoLpU
-81EyhlSqA+Tyby2QmncIq7spbsmEjwZw1TDFbTZORqI=
------END RSA PRIVATE KEY-----`,
+  port: parseInt(SERVER_PORT as string),
+  saltWorkFactor: parseInt(SALT_WORK_FACTOR as string),
+  accessTokenTtl: ACCESS_TOKEN_TTL,
+  refreshTokenTtl: REFRESH_TOKEN_TTL,
+  privateKey: PRIVATE_KEY,
+  publicKey: PUBLIC_KEY,
 };

@@ -1,10 +1,11 @@
 import "reflect-metadata";
-import { Item } from "./entities/item.entity";
-import { Post } from "./entities/post.entity";
-import { User } from "./entities/user.entity";
+import { Item } from "../entities/item.entity";
+import { Post } from "../entities/post.entity";
+import { User } from "../entities/user.entity";
 import { config } from "dotenv";
 import { DataSource } from "typeorm";
-import { Session } from "./entities/session.entity";
+import { Session } from "../entities/session.entity";
+import { logger } from "./logger";
 
 config();
 
@@ -24,3 +25,13 @@ export const AppDataSource = new DataSource({
   // subscribers: [],
   // migrations: [],
 });
+
+export const initializeDataSource = async () => {
+  try {
+    await AppDataSource.initialize();
+    logger.info("Data Source has been initialized!");
+  } catch (err: any) {
+    logger.error("Error during Data Source initialization:", err);
+    process.exit(1);
+  }
+};

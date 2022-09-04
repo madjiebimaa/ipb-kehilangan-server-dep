@@ -43,12 +43,10 @@ export async function getUserSessionHandler(_: Request, res: Response) {
   const sessions = await findUserSessions({
     where: { user: { id: userId }, valid: true },
   });
-
-  if (!sessions) {
+  if (!sessions)
     return res
       .status(StatusCodes.UNAUTHORIZED)
       .send({ message: "user has not logged in yet" });
-  }
 
   return res.status(StatusCodes.OK).send(sessions);
 }

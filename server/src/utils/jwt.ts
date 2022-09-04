@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import config from "config";
+import { logger } from "./logger";
 
 const publicKey = config.get<string>("publicKey");
 const privateKey = config.get<string>("privateKey");
@@ -19,11 +20,11 @@ export function verifyJwt(token: string) {
       expired: false,
       decoded,
     };
-  } catch (e: any) {
-    console.error(e);
+  } catch (err: any) {
+    logger.error("Error during verifying JWT", err);
     return {
       valid: false,
-      expired: e.message === "jwt expired",
+      expired: err.message === "jwt expired",
       decoded: null,
     };
   }
