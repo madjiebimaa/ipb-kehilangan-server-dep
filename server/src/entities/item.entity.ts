@@ -15,7 +15,7 @@ export class Item extends BaseEntity {
   @Column({ length: 100 })
   name: string;
 
-  @Column()
+  @Column({ name: "image_url" })
   imageUrl: string;
 
   @Column()

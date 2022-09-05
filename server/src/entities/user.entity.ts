@@ -34,23 +34,23 @@ export class User extends BaseEntity {
   @Column()
   password: string;
 
-  @Column({ length: 14, unique: true, nullable: true })
+  @Column({ name: "phone_number", length: 14, unique: true, nullable: true })
   phoneNumber: string;
 
-  @Column({ nullable: true })
+  @Column({ name: "card_identity", nullable: true })
   cardIdentity: string;
 
-  @Column({ nullable: true })
+  @Column({ name: "profile_picture", nullable: true })
   profilePicture: string;
 
   @Column({ length: 20, nullable: true })
   // !FIX: temporary nullable, change after role class already exist
   role: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: "created_at" })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: "updated_at" })
   updatedAt: Date;
 
   @OneToMany(() => Post, (post) => post.user)

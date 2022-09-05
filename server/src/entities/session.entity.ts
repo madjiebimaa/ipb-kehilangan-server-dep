@@ -9,6 +9,7 @@ import {
   UpdateDateColumn,
   ManyToOne,
   Relation,
+  JoinColumn,
 } from "typeorm";
 import { nanoid } from "nanoid";
 
@@ -20,16 +21,17 @@ export class Session extends BaseEntity {
   @Column({ default: true })
   valid: boolean;
 
-  @Column()
+  @Column({ name: "user_agent" })
   userAgent: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: "created_at" })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: "updated_at" })
   updatedAt: Date;
 
   @ManyToOne(() => User, (user) => user.posts)
+  @JoinColumn({ name: "user_id" })
   user: Relation<User>;
 
   @BeforeInsert()

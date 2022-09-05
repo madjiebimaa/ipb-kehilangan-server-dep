@@ -25,29 +25,30 @@ export class Post extends BaseEntity {
   @PrimaryColumn()
   id: string;
 
-  @Column({ length: 20, default: PostStatus.LOST })
+  @Column({ name: "lost_status", length: 20, default: PostStatus.LOST })
   lostStatus: string;
 
-  @Column({ nullable: true })
+  @Column({ name: "lost_date", nullable: true })
   lostDate: Date;
 
-  @Column({ length: 200, nullable: true })
+  @Column({ name: "lost_location", length: 200, nullable: true })
   lostLocation: string;
 
-  @Column({ default: 0 })
+  @Column({ name: "view_count", default: 0 })
   viewCount: number;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: "created_at" })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: "updated_at" })
   updatedAt: Date;
 
   @OneToOne(() => Item)
-  @JoinColumn()
+  @JoinColumn({ name: "item_id" })
   item: Relation<Item>;
 
   @ManyToOne(() => User, (user) => user.posts)
+  @JoinColumn({ name: "user_id" })
   user: Relation<User>;
 
   @BeforeInsert()
