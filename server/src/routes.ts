@@ -7,8 +7,12 @@ import {
   deleteUserSessionHandler,
   getUserSessionHandler,
 } from "./controllers/session.controller";
-import { createUserHandler } from "./controllers/user.controller";
-import { createUserSchema } from "./schemas/user.schema";
+import {
+  createUserHandler,
+  meUserHandler,
+  updateUserHandler,
+} from "./controllers/user.controller";
+import { createUserSchema, updateUserSchema } from "./schemas/user.schema";
 import { requireUser } from "./middlewares/requireUser";
 import {
   createPostHandler,
@@ -32,6 +36,12 @@ export function routes(app: Express) {
     "/api/users",
     validateResources(createUserSchema),
     createUserHandler
+  );
+  app.get("/api/users", requireUser, meUserHandler);
+  app.put(
+    "/api/users",
+    [requireUser, validateResources(updateUserSchema)],
+    updateUserHandler
   );
 
   app.post(

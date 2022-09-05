@@ -21,7 +21,17 @@ export const createUserSchema = z.object({
     }),
 });
 
+export const updateUserSchema = z.object({
+  body: z.object({
+    phoneNumber: z.string().optional(),
+    cardIdentity: z.string().optional(),
+    profilePicture: z.string().optional(),
+    address: z.string().optional(),
+  }),
+});
+
 export type CreateUserInput = Omit<
   z.TypeOf<typeof createUserSchema>,
   "body.passwordConfirmation"
 >;
+export type UpdateUserInput = z.TypeOf<typeof updateUserSchema>;

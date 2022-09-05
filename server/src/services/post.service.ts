@@ -16,14 +16,14 @@ export async function createPost(input: DeepPartial<Post>) {
   }
 }
 
-export async function getPost(query: FindOneOptions<Post>) {
+export async function findPost(query: FindOneOptions<Post>) {
   return await Post.findOne({
     ...query,
     relations: { item: true, user: true },
   });
 }
 
-export async function getPosts(query?: FindManyOptions<Post>) {
+export async function findPosts(query?: FindManyOptions<Post>) {
   return await Post.find({ ...query, relations: { item: true, user: true } });
 }
 

@@ -18,6 +18,7 @@ import { nanoid } from "nanoid";
 enum PostStatus {
   LOST = "LOST",
   FOUND = "FOUND",
+  RETURNED = "RETURNED",
 }
 
 @Entity("posts")
@@ -52,7 +53,7 @@ export class Post extends BaseEntity {
   user: Relation<User>;
 
   @BeforeInsert()
-  setId() {
+  private setId() {
     const post = this as Post;
     post.id = `post_${nanoid()}`;
   }

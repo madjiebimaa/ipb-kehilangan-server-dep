@@ -10,8 +10,8 @@ import { Request, Response } from "express";
 import { createItem, updateItem } from "../services/item.service";
 import {
   createPost,
-  getPost,
-  getPosts,
+  findPost,
+  findPosts,
   updatePost,
 } from "../services/post.service";
 
@@ -38,7 +38,12 @@ export async function getPostHandler(
   res: Response
 ) {
   const { postId } = req.params;
-  const post = await getPost({ where: { id: postId } });
+  const post = await findPost({ where: { id: postId } });
+  if (!post)
+    return res
+      .status(StatusCodes.NOT_FOUND)
+      .send({ message: "Post is not found" });
+
   return res.status(StatusCodes.OK).send(post);
 }
 
@@ -46,8 +51,7 @@ export async function getPostsHandler(
   req: Request<{}, {}, {}, GetPostsInput["query"]>,
   res: Response
 ) {
-  const { lostStatus } = req.query;
-  const posts = await getPosts({ where: { lostStatus } });
+  const posts = await findPosts({ where: { ...req.query } });
   return res.status(StatusCodes.OK).send(posts);
 }
 
@@ -58,7 +62,7 @@ export async function updatePostHandler(
   const userId = res.locals.user.id;
   const { postId } = req.params;
 
-  const post = await getPost({ where: { id: postId } });
+  const post = await findPost({ where: { id: postId } });
   if (!post)
     return res
       .status(StatusCodes.NOT_FOUND)

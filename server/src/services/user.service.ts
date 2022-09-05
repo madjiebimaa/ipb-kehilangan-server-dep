@@ -1,6 +1,7 @@
+import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { omit } from "lodash";
 import { logger } from "../utils/logger";
-import { DeepPartial, FindOneOptions } from "typeorm";
+import { DeepPartial, FindOneOptions, FindOptionsWhere } from "typeorm";
 import { User } from "../entities/user.entity";
 
 export async function createUser(input: DeepPartial<User>) {
@@ -15,7 +16,14 @@ export async function createUser(input: DeepPartial<User>) {
 }
 
 export async function findUser(query: FindOneOptions<User>) {
-  return await User.findOne(query);
+  return omit(await User.findOne(query), "password");
+}
+
+export async function updateUser(
+  query: FindOptionsWhere<User>,
+  update: QueryDeepPartialEntity<User>
+) {
+  return await User.update(query, update);
 }
 
 export async function validatePassword({

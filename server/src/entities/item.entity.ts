@@ -23,7 +23,7 @@ export class Item extends BaseEntity {
   characteristics: string;
 
   @BeforeInsert()
-  setId() {
+  private setId() {
     const item = this as Item;
     item.id = `item_${nanoid()}`;
   }

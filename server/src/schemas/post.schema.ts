@@ -24,13 +24,14 @@ export const body = {
 
 export const params = {
   params: z.object({
-    postId: z.string({ required_error: "postId is required" }),
+    postId: z.string({ required_error: "PostId is required" }),
   }),
 };
 
 export const query = {
   query: z.object({
     lostStatus: z.string().optional(),
+    itemName: z.string().optional(),
   }),
 };
 

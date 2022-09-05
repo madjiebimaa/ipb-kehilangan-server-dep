@@ -35,7 +35,7 @@ export class Session extends BaseEntity {
   user: Relation<User>;
 
   @BeforeInsert()
-  setId() {
+  private setId() {
     const session = this as Session;
     session.id = `session_${nanoid()}`;
   }

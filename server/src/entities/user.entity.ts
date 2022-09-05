@@ -43,6 +43,9 @@ export class User extends BaseEntity {
   @Column({ name: "profile_picture", nullable: true })
   profilePicture: string;
 
+  @Column({ length: 200, nullable: true })
+  address: string;
+
   @Column({ length: 20, nullable: true })
   // !FIX: temporary nullable, change after role class already exist
   role: string;
@@ -66,7 +69,7 @@ export class User extends BaseEntity {
   }
 
   @BeforeInsert()
-  setId() {
+  private setId() {
     const user = this as User;
     user.id = `user_${nanoid()}`;
   }

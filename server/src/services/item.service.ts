@@ -14,7 +14,7 @@ export async function createItem(input: DeepPartial<Item>) {
   }
 }
 
-export async function getItem(query: FindOneOptions<Item>) {
+export async function findItem(query: FindOneOptions<Item>) {
   return await Item.findOne(query);
 }
 
