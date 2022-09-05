@@ -10,6 +10,18 @@ import {
 import { createUserHandler } from "./controllers/user.controller";
 import { createUserSchema } from "./schemas/user.schema";
 import { requireUser } from "./middlewares/requireUser";
+import {
+  createPostHandler,
+  getPostHandler,
+  getPostsHandler,
+  updatePostHandler,
+} from "./controllers/post.controller";
+import {
+  createPostSchema,
+  getPostSchema,
+  getPostsSchema,
+  updatePostSchema,
+} from "./schemas/post.schema";
 
 export function routes(app: Express) {
   app.get("/api/healthcheck", (_: Request, res: Response) =>
@@ -29,4 +41,21 @@ export function routes(app: Express) {
   );
   app.get("/api/sessions", requireUser, getUserSessionHandler);
   app.delete("/api/sessions", requireUser, deleteUserSessionHandler);
+
+  app.post(
+    "/api/posts",
+    [requireUser, validateResources(createPostSchema)],
+    createPostHandler
+  );
+  app.get(
+    "/api/posts/:postId",
+    validateResources(getPostSchema),
+    getPostHandler
+  );
+  app.get("/api/posts", validateResources(getPostsSchema), getPostsHandler);
+  app.put(
+    "/api/posts/:postId",
+    [requireUser, validateResources(updatePostSchema)],
+    updatePostHandler
+  );
 }

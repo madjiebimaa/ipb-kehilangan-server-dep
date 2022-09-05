@@ -10,16 +10,22 @@ import {
   UpdateDateColumn,
   BeforeInsert,
   BaseEntity,
+  Relation,
 } from "typeorm";
 import { Item } from "./item.entity";
 import { nanoid } from "nanoid";
+
+enum PostStatus {
+  LOST = "LOST",
+  FOUND = "FOUND",
+}
 
 @Entity("posts")
 export class Post extends BaseEntity {
   @PrimaryColumn()
   id: string;
 
-  @Column({ length: 20 })
+  @Column({ length: 20, default: PostStatus.LOST })
   lostStatus: string;
 
   @Column({ nullable: true })
@@ -28,7 +34,7 @@ export class Post extends BaseEntity {
   @Column({ length: 200, nullable: true })
   lostLocation: string;
 
-  @Column()
+  @Column({ default: 0 })
   viewCount: number;
 
   @CreateDateColumn()
@@ -39,14 +45,14 @@ export class Post extends BaseEntity {
 
   @OneToOne(() => Item)
   @JoinColumn()
-  item: Item;
+  item: Relation<Item>;
 
   @ManyToOne(() => User, (user) => user.posts)
-  user: User;
+  user: Relation<User>;
 
   @BeforeInsert()
   setId() {
     const post = this as Post;
-    post.id = nanoid();
+    post.id = `post_${nanoid()}`;
   }
 }

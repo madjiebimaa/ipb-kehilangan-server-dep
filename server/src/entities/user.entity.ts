@@ -12,6 +12,7 @@ import {
   Entity,
   OneToMany,
   PrimaryColumn,
+  Relation,
   UpdateDateColumn,
 } from "typeorm";
 import bcrypt from "bcrypt";
@@ -42,7 +43,8 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   profilePicture: string;
 
-  @Column({ length: 20, nullable: true }) // temporary nullable, change after role class already exist
+  @Column({ length: 20, nullable: true })
+  // !FIX: temporary nullable, change after role class already exist
   role: string;
 
   @CreateDateColumn()
@@ -52,10 +54,10 @@ export class User extends BaseEntity {
   updatedAt: Date;
 
   @OneToMany(() => Post, (post) => post.user)
-  posts: Post[];
+  posts: Relation<Post[]>;
 
   @OneToMany(() => Session, (session) => session.user)
-  sessions: Session[];
+  sessions: Relation<Session[]>;
 
   private tempPassword: string;
   @AfterLoad()
@@ -66,7 +68,7 @@ export class User extends BaseEntity {
   @BeforeInsert()
   setId() {
     const user = this as User;
-    user.id = nanoid();
+    user.id = `user_${nanoid()}`;
   }
 
   @BeforeInsert()

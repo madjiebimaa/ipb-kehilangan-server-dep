@@ -21,7 +21,7 @@ export function verifyJwt(token: string) {
       decoded,
     };
   } catch (err: any) {
-    logger.error("Error during verifying JWT", err);
+    logger.error("Error during verifying JWT:", err);
     return {
       valid: false,
       expired: err.message === "jwt expired",

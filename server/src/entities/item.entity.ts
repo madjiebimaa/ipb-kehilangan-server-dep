@@ -1,10 +1,8 @@
 import { nanoid } from "nanoid";
-import { Post } from "./post.entity";
 import {
   Column,
   Entity,
   PrimaryColumn,
-  OneToOne,
   BeforeInsert,
   BaseEntity,
 } from "typeorm";
@@ -21,14 +19,12 @@ export class Item extends BaseEntity {
   image: string;
 
   @Column()
+  // !FIX: change type to []ItemCharacter when the model already exist
   characteristics: string;
-
-  @OneToOne(() => Post, (post) => post.item)
-  post: Post;
 
   @BeforeInsert()
   setId() {
     const item = this as Item;
-    item.id = nanoid();
+    item.id = `item_${nanoid()}`;
   }
 }

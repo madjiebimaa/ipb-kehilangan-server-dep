@@ -6,14 +6,17 @@ import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity
 import { Session } from "../entities/session.entity";
 import { User } from "../entities/user.entity";
 import { findUser } from "./user.service";
+import { logger } from "../utils/logger";
 
 export async function createUserSession(userId: string, userAgent: string) {
   try {
     const user = await User.findOneBy({ id: userId });
-    const session = Session.create({ user: user!, userAgent }); // temporary implementation for ! sign, assumption: user always found by the ID
+    // !FIX: temporary implementation for ! sign, assumption: user always found by the ID
+    const session = Session.create({ user: user!, userAgent });
     await session.save();
     return session;
   } catch (err: any) {
+    logger.error("Error during creating session into DB:", err);
     throw new Error(err);
   }
 }

@@ -4,12 +4,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
-  OneToOne,
   BeforeInsert,
   PrimaryColumn,
   UpdateDateColumn,
   ManyToOne,
+  Relation,
 } from "typeorm";
 import { nanoid } from "nanoid";
 
@@ -31,11 +30,11 @@ export class Session extends BaseEntity {
   updatedAt: Date;
 
   @ManyToOne(() => User, (user) => user.posts)
-  user: User;
+  user: Relation<User>;
 
   @BeforeInsert()
   setId() {
     const session = this as Session;
-    session.id = nanoid();
+    session.id = `session_${nanoid()}`;
   }
 }

@@ -1,13 +1,15 @@
 import { omit } from "lodash";
+import { logger } from "../utils/logger";
 import { DeepPartial, FindOneOptions } from "typeorm";
 import { User } from "../entities/user.entity";
 
 export async function createUser(input: DeepPartial<User>) {
   try {
-    const user = User.create({ ...input });
+    const user = User.create(input);
     await user.save();
     return omit(user, "password");
   } catch (err: any) {
+    logger.error("Error during inserting user to DB:", err);
     throw new Error(err);
   }
 }
