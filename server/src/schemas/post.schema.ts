@@ -6,17 +6,17 @@ export const body = {
     lostDate: z.string().optional(),
     lostLocation: z
       .string()
-      .max(200, { message: "must be 200 or fewer characters long" })
+      .max(200, { message: "Must be 200 or fewer characters long" })
       .optional(),
     item: z.object({
       name: z
-        .string({ required_error: "name is required" })
-        .max(100, { message: "must be 100 or fewer characters long" }),
-      image: z
-        .string({ required_error: "image is required" })
-        .url({ message: "invalid url" }),
+        .string({ required_error: "Name is required" })
+        .max(100, { message: "Must be 100 or fewer characters long" }),
+      imageUrl: z
+        .string({ required_error: "Image URL is required" })
+        .url({ message: "Invalid url" }),
       characteristics: z.string({
-        required_error: "characteristics is required",
+        required_error: "Characteristics is required",
       }),
     }),
   }),

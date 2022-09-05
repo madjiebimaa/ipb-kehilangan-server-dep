@@ -16,7 +16,7 @@ export class Item extends BaseEntity {
   name: string;
 
   @Column()
-  image: string;
+  imageUrl: string;
 
   @Column()
   // !FIX: change type to []ItemCharacter when the model already exist

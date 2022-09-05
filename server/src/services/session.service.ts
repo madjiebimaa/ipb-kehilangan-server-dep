@@ -16,7 +16,7 @@ export async function createUserSession(userId: string, userAgent: string) {
     await session.save();
     return session;
   } catch (err: any) {
-    logger.error("Error during creating session into DB:", err);
+    logger.error("Error during inserting session into DB:", err);
     throw new Error(err);
   }
 }

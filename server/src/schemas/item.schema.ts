@@ -3,13 +3,13 @@ import z from "zod";
 export const body = {
   body: z.object({
     name: z
-      .string({ required_error: "name is required" })
-      .max(100, { message: "must be 100 or fewer characters long" }),
-    image: z
-      .string({ required_error: "image is required" })
-      .url({ message: "invalid url" }),
+      .string({ required_error: "Name is required" })
+      .max(100, { message: "Must be 100 or fewer characters long" }),
+    imageUrl: z
+      .string({ required_error: "Image URL is required" })
+      .url({ message: "Invalid url" }),
     characteristics: z.string({
-      required_error: "characteristics is required",
+      required_error: "Characteristics is required",
     }),
   }),
 };
