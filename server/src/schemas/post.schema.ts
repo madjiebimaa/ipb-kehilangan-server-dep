@@ -1,24 +1,28 @@
+import { ItemImage, ItemCharacteristic } from "./../entities/item.entity";
+import { PostLostStatus } from "./../entities/post.entity";
 import z from "zod";
+
+export const itemImageSchema = z.instanceof(ItemImage);
+export const itemCharacteristicSchema = z.instanceof(ItemCharacteristic);
 
 // !FIX: redundance nested from different schema path
 export const body = {
   body: z.object({
+    lostStatus: z.nativeEnum(PostLostStatus).optional(),
     lostDate: z.string().optional(),
     lostLocation: z
       .string()
       .max(200, { message: "Must be 200 or fewer characters long" })
       .optional(),
-    item: z.object({
-      name: z
-        .string({ required_error: "Name is required" })
-        .max(100, { message: "Must be 100 or fewer characters long" }),
-      imageUrl: z
-        .string({ required_error: "Image URL is required" })
-        .url({ message: "Invalid url" }),
-      characteristics: z.string({
-        required_error: "Characteristics is required",
-      }),
-    }),
+    item: z
+      .object({
+        name: z
+          .string({ required_error: "Name is required" })
+          .max(100, { message: "Must be 100 or fewer characters long" }),
+        imageUrls: itemImageSchema.array(),
+        characteristics: itemCharacteristicSchema.array(),
+      })
+      .deepPartial(),
   }),
 };
 

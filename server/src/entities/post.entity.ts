@@ -15,10 +15,10 @@ import {
 import { Item } from "./item.entity";
 import { nanoid } from "nanoid";
 
-enum PostStatus {
-  LOST = "LOST",
-  FOUND = "FOUND",
-  RETURNED = "RETURNED",
+export enum PostLostStatus {
+  LOST = "lost",
+  FOUND = "found",
+  RETURNED = "returned",
 }
 
 @Entity("posts")
@@ -26,7 +26,12 @@ export class Post extends BaseEntity {
   @PrimaryColumn()
   id: string;
 
-  @Column({ name: "lost_status", length: 20, default: PostStatus.LOST })
+  @Column({
+    name: "lost_status",
+    type: "enum",
+    enum: PostLostStatus,
+    default: PostLostStatus.LOST,
+  })
   lostStatus: string;
 
   @Column({ name: "lost_date", nullable: true })

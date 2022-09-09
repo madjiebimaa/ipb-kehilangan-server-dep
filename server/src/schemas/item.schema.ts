@@ -1,16 +1,16 @@
+import { ItemCharacteristic, ItemImage } from "./../entities/item.entity";
 import z from "zod";
+
+export const itemImageSchema = z.instanceof(ItemImage);
+export const itemCharacteristicSchema = z.instanceof(ItemCharacteristic);
 
 export const body = {
   body: z.object({
     name: z
       .string({ required_error: "Name is required" })
       .max(100, { message: "Must be 100 or fewer characters long" }),
-    imageUrl: z
-      .string({ required_error: "Image URL is required" })
-      .url({ message: "Invalid url" }),
-    characteristics: z.string({
-      required_error: "Characteristics is required",
-    }),
+    imageUrls: itemImageSchema.array(),
+    characteristics: itemCharacteristicSchema.array(),
   }),
 };
 

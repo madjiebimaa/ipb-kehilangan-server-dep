@@ -15,7 +15,10 @@ export async function createItem(input: DeepPartial<Item>) {
 }
 
 export async function findItem(query: FindOneOptions<Item>) {
-  return await Item.findOne(query);
+  return await Item.findOne({
+    ...query,
+    relations: { characteristics: true, imageUrls: true },
+  });
 }
 
 export async function updateItem(

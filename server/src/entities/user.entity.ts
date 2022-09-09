@@ -17,6 +17,11 @@ import {
 } from "typeorm";
 import bcrypt from "bcrypt";
 
+export enum UserRoles {
+  Admin = "admin",
+  Civitas = "civitas",
+}
+
 @Entity("users")
 export class User extends BaseEntity {
   @PrimaryColumn()
@@ -46,8 +51,7 @@ export class User extends BaseEntity {
   @Column({ length: 200, nullable: true })
   address: string;
 
-  @Column({ length: 20, nullable: true })
-  // !FIX: temporary nullable, change after role class already exist
+  @Column({ type: "enum", enum: UserRoles, default: UserRoles.Civitas })
   role: string;
 
   @CreateDateColumn({ name: "created_at" })

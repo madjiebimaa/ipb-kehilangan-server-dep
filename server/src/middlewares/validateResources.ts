@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import { NextFunction, Request, Response } from "express";
-import { AnyZodObject } from "zod";
+import { AnyZodObject, ZodError } from "zod";
 import { logger } from "../utils/logger";
 
 export const validateResources =
@@ -12,6 +12,9 @@ export const validateResources =
       return next();
     } catch (err: any) {
       logger.error("Error location is validateResource middleware:", err);
-      return res.status(StatusCodes.BAD_REQUEST).send({ message: err.errors });
+      console.log(err);
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .send({ message: err.errors[0].message });
     }
   };

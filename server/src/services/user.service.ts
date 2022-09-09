@@ -8,7 +8,7 @@ export async function createUser(input: DeepPartial<User>) {
   try {
     const user = User.create(input);
     await user.save();
-    return omit(user, "password");
+    return omit(user, "password", "tempPassword");
   } catch (err: any) {
     logger.error("Error during inserting user to DB:", err);
     throw new Error(err);
@@ -16,7 +16,7 @@ export async function createUser(input: DeepPartial<User>) {
 }
 
 export async function findUser(query: FindOneOptions<User>) {
-  return omit(await User.findOne(query), "password");
+  return omit(await User.findOne(query), "password", "tempPassword");
 }
 
 export async function updateUser(
@@ -39,5 +39,5 @@ export async function validatePassword({
   const isValid = await user.comparePassword(password);
   if (!isValid) return false;
 
-  return omit(user, "password");
+  return omit(user, "password", "tempPassword");
 }

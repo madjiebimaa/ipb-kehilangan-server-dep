@@ -44,6 +44,7 @@ export async function getPostHandler(
       .status(StatusCodes.NOT_FOUND)
       .send({ message: "Post is not found" });
 
+  await updatePost({ id: post.id }, { viewCount: post.viewCount + 1 });
   return res.status(StatusCodes.OK).send(post);
 }
 

@@ -19,7 +19,7 @@ export async function createPost(input: DeepPartial<Post>) {
 export async function findPost(query: FindOneOptions<Post>) {
   return await Post.findOne({
     ...query,
-    relations: { item: true, user: true },
+    relations: { item: { characteristics: true, imageUrls: true }, user: true },
   });
 }
 

@@ -1,3 +1,4 @@
+import { ItemImage, ItemCharacteristic } from "./../entities/item.entity";
 import "reflect-metadata";
 import { Item } from "../entities/item.entity";
 import { Post } from "../entities/post.entity";
@@ -19,7 +20,7 @@ export const AppDataSource = new DataSource({
   username: DB_USERNAME,
   password: DB_PASSWORD,
   database: DB_NAME,
-  entities: [User, Post, Item, Session],
+  entities: [User, Post, Item, ItemImage, ItemCharacteristic, Session],
   synchronize: true,
   logging: true,
   // subscribers: [],
@@ -31,6 +32,7 @@ export const initializeDataSource = async () => {
     await AppDataSource.initialize();
     logger.info("Data Source has been initialized!");
   } catch (err: any) {
+    console.log(err);
     logger.error("Error during Data Source initialization:", err);
     process.exit(1);
   }

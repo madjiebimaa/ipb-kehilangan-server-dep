@@ -1,3 +1,4 @@
+import { UserRoles } from "./../entities/user.entity";
 import z from "zod";
 
 export const createUserSchema = z.object({
@@ -8,6 +9,7 @@ export const createUserSchema = z.object({
       email: z.string({ required_error: "Email is required" }).email({
         message: "Not a valid email",
       }),
+      role: z.nativeEnum(UserRoles).optional(),
       password: z
         .string({ required_error: "Password is required" })
         .min(6, "Password to short - should be 6 chars minimum"),
