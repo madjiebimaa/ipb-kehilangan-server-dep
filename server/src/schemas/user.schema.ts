@@ -32,8 +32,17 @@ export const updateUserSchema = z.object({
   }),
 });
 
+export const forgotPasswordSchema = z.object({
+  body: z.object({
+    email: z
+      .string({ required_error: "Email is required" })
+      .email({ message: "Not a valid email" }),
+  }),
+});
+
 export type CreateUserInput = Omit<
   z.TypeOf<typeof createUserSchema>,
   "body.passwordConfirmation"
 >;
 export type UpdateUserInput = z.TypeOf<typeof updateUserSchema>;
+export type ForgotPasswordInput = z.TypeOf<typeof forgotPasswordSchema>;

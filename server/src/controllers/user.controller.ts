@@ -1,8 +1,13 @@
-import { CreateUserInput, UpdateUserInput } from "./../schemas/user.schema";
+import {
+  CreateUserInput,
+  ForgotPasswordInput,
+  UpdateUserInput,
+} from "./../schemas/user.schema";
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { createUser, findUser, updateUser } from "../services/user.service";
 import { logger } from "../utils/logger";
+// import from ''
 
 export async function createUserHandler(
   req: Request<{}, {}, CreateUserInput["body"]>,
@@ -45,3 +50,10 @@ export async function updateUserHandler(
 
   return res.status(StatusCodes.OK).send({ message: "success updating user" });
 }
+
+export async function changePasswordHandler(req: Request, res: Response) {}
+
+export async function forgotPassword(
+  req: Request<{}, {}, ForgotPasswordInput["body"]>,
+  res: Response
+) {}
