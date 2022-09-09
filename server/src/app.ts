@@ -1,3 +1,4 @@
+import { User } from "./entities/user.entity";
 import { __prod__ } from "./utils/constant";
 import "reflect-metadata";
 import { config as configDotEnv } from "dotenv";
