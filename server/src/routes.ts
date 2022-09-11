@@ -8,11 +8,18 @@ import {
   getUserSessionHandler,
 } from "./controllers/session.controller";
 import {
+  changePasswordHandler,
   createUserHandler,
+  forgotPasswordHandler,
   meUserHandler,
   updateUserHandler,
 } from "./controllers/user.controller";
-import { createUserSchema, updateUserSchema } from "./schemas/user.schema";
+import {
+  changePasswordSchema,
+  createUserSchema,
+  forgotPasswordSchema,
+  updateUserSchema,
+} from "./schemas/user.schema";
 import { requireUser } from "./middlewares/requireUser";
 import {
   createPostHandler,
@@ -42,6 +49,16 @@ export function routes(app: Express) {
     "/api/users",
     [requireUser, validateResources(updateUserSchema)],
     updateUserHandler
+  );
+  app.get(
+    "/api/users/forgot-password",
+    validateResources(forgotPasswordSchema),
+    forgotPasswordHandler
+  );
+  app.patch(
+    "/api/users/change-password",
+    validateResources(changePasswordSchema),
+    changePasswordHandler
   );
 
   app.post(

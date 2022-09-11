@@ -40,9 +40,21 @@ export const forgotPasswordSchema = z.object({
   }),
 });
 
+export const changePasswordSchema = z.object({
+  body: z.object({
+    newPassword: z
+      .string({ required_error: "New password is required" })
+      .min(6, "Password to short - should be 6 chars minimum"),
+  }),
+  query: z.object({
+    token: z.string({ required_error: "Token is required" }),
+  }),
+});
+
 export type CreateUserInput = Omit<
   z.TypeOf<typeof createUserSchema>,
   "body.passwordConfirmation"
 >;
 export type UpdateUserInput = z.TypeOf<typeof updateUserSchema>;
 export type ForgotPasswordInput = z.TypeOf<typeof forgotPasswordSchema>;
+export type ChangePasswordInput = z.TypeOf<typeof changePasswordSchema>;

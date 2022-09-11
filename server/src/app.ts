@@ -1,4 +1,4 @@
-import { User } from "./entities/user.entity";
+import { insertRedisClient } from "./middlewares/insertRedisClient";
 import { __prod__ } from "./utils/constant";
 import "reflect-metadata";
 import { config as configDotEnv } from "dotenv";
@@ -16,13 +16,20 @@ import connectRedis from "connect-redis";
 configDotEnv();
 
 const app = express();
-const redis = new Redis({});
+
+const redis = new Redis({
+  host: "0.0.0.0",
+  port: 6379,
+});
+
 const redisStore = connectRedis(session);
+
 const port = config.get<number>("port");
 
 app.use(express.json());
 app.use(deserializeUser);
 app.use(logResources);
+app.use(insertRedisClient(redis));
 app.use(
   session({
     name: process.env.COOKIE_NAME,

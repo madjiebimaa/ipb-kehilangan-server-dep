@@ -68,7 +68,8 @@ export class User extends BaseEntity {
 
   private tempPassword: string;
   @AfterLoad()
-  private loadTempPassword(): void {
+  private loadTempPassword() {
+    console.log("AFTER LOAD");
     this.tempPassword = this.password;
   }
 
@@ -81,6 +82,7 @@ export class User extends BaseEntity {
   @BeforeInsert()
   @BeforeUpdate()
   private async encryptPassword() {
+    console.log("BEFORE INSERT & UPDATE");
     const user = this as User;
 
     if (this.tempPassword !== this.password) {
@@ -94,5 +96,11 @@ export class User extends BaseEntity {
     const user = this as User;
 
     return bcrypt.compare(candidatePassword, user.password).catch(() => false);
+  }
+
+  changePassword(newPassword: string) {
+    console.log("CHANGE PASSWORD");
+    const user = this as User;
+    user.password = newPassword;
   }
 }

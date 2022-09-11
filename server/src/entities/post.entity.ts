@@ -21,6 +21,8 @@ export enum PostLostStatus {
   RETURNED = "returned",
 }
 
+export enum PostCategory {}
+
 @Entity("posts")
 export class Post extends BaseEntity {
   @PrimaryColumn()

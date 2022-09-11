@@ -26,7 +26,7 @@ export async function updateUser(
   return await User.update(query, update);
 }
 
-export async function validatePassword({
+export async function validateUserPassword({
   email,
   password,
 }: {
@@ -40,4 +40,12 @@ export async function validatePassword({
   if (!isValid) return false;
 
   return omit(user, "password", "tempPassword");
+}
+
+export async function changeUserPassword(userId: string, newPassword: string) {
+  const user = await User.findOneBy({ id: userId });
+  if (!user) return false;
+
+  user.password = newPassword;
+  return await user.save();
 }

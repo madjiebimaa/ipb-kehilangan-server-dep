@@ -29,6 +29,7 @@ export async function createPostHandler(
     return res.status(StatusCodes.CREATED).send(post);
   } catch (err: any) {
     logger.error("Error location is createPostHandler:", err);
+
     return res.status(StatusCodes.BAD_REQUEST).send({ message: err.message });
   }
 }
@@ -45,6 +46,7 @@ export async function getPostHandler(
       .send({ message: "Post is not found" });
 
   await updatePost({ id: post.id }, { viewCount: post.viewCount + 1 });
+
   return res.status(StatusCodes.OK).send(post);
 }
 
@@ -53,6 +55,7 @@ export async function getPostsHandler(
   res: Response
 ) {
   const posts = await findPosts({ where: { ...req.query } });
+
   return res.status(StatusCodes.OK).send(posts);
 }
 
@@ -81,5 +84,6 @@ export async function updatePostHandler(
   const { ["item"]: _, ...updatePostInput } = req.body;
 
   await updatePost({ id: postId }, updatePostInput);
+
   return res.status(StatusCodes.OK).send({ message: "success updating post" });
 }

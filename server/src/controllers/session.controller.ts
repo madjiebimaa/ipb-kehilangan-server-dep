@@ -2,7 +2,7 @@ import { CreateUserSessionInput } from "./../schemas/session.schema";
 import config from "config";
 import { StatusCodes } from "http-status-codes";
 import { Request, Response } from "express";
-import { validatePassword } from "../services/user.service";
+import { validateUserPassword } from "../services/user.service";
 import {
   createUserSession,
   findUserSessions,
@@ -14,13 +14,12 @@ export async function createUserSessionHandler(
   req: Request<{}, {}, CreateUserSessionInput["body"]>,
   res: Response
 ) {
-  const user = await validatePassword(req.body);
+  const user = await validateUserPassword(req.body);
 
-  if (!user) {
+  if (!user)
     return res
       .status(StatusCodes.UNAUTHORIZED)
       .send({ message: "invalid email or password" });
-  }
 
   const session = await createUserSession(user.id, req.get("user-agent") || "");
 

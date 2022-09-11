@@ -2,11 +2,12 @@ import { User } from "./../entities/user.entity";
 import nodemailer from "nodemailer";
 import { config } from "dotenv";
 import { logger } from "./logger";
+import { DeepPartial } from "typeorm";
 
 config();
 
 type SendEmailProps = {
-  user: User;
+  user: DeepPartial<User>;
   subject: string;
   token: string;
 };
@@ -14,7 +15,7 @@ type SendEmailProps = {
 // !FIX: function have to much things to do
 export async function sendMail({ user, subject, token }: SendEmailProps) {
   const customerPortal = "IPB Kehilangan";
-  const changePasswordUrl = `http://localhost:3000/api/users/change-password/${token}`;
+  const changePasswordUrl = `http://localhost:3000/api/users/change-password?token=${token}`;
 
   const transporter = nodemailer.createTransport({
     host: "smtp.ethereal.email",
@@ -49,6 +50,6 @@ export async function sendMail({ user, subject, token }: SendEmailProps) {
     `,
   });
 
-  logger.info("Message sent: %s", info.messageId);
-  logger.info("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+  logger.info("Mail message sent: %s", info.messageId);
+  logger.info("Preview Mail URL: %s", nodemailer.getTestMessageUrl(info));
 }
