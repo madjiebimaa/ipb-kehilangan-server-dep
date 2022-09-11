@@ -4,6 +4,8 @@ import {
   CreateUserInput,
   ForgotPasswordInput,
   UpdateUserInput,
+  ValidateEmailInput,
+  VerifyEmailInput,
 } from "./../schemas/user.schema";
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
@@ -14,7 +16,7 @@ import {
   updateUser,
 } from "../services/user.service";
 import { logger } from "../utils/logger";
-import { nanoid } from "nanoid";
+import { nanoid, customAlphabet } from "nanoid";
 import { sendMail } from "../utils/mail";
 
 export async function createUserHandler(
@@ -74,8 +76,7 @@ export async function forgotPasswordHandler(
       .send({ message: "User is not found" });
 
   const token = nanoid();
-  await redis.set(`change_password_${token}`, user.id),
-    (err: any) => logger.error(err);
+  await redis.set(`change_password_${token}`, user.id);
   // await sendMail({ user, subject: "Change Password", token });
 
   return res.status(StatusCodes.OK).send({
@@ -100,7 +101,7 @@ export async function changePasswordHandler(
   const key = `change_password_${token}`;
   const userId = await redis.get(key);
   if (!userId)
-    res
+    return res
       .status(StatusCodes.NOT_FOUND)
       .send({ message: "Token already expired" });
 
@@ -110,5 +111,60 @@ export async function changePasswordHandler(
 
   return res.status(StatusCodes.OK).send({
     message: "Success to set a new password",
+  });
+}
+
+export async function validateEmailHandler(
+  req: Request<{}, {}, ValidateEmailInput["body"]>,
+  res: Response
+) {
+  const redis = res.locals.redis as Redis;
+  const { email } = req.body;
+
+  const user = await findUser({ where: { email } });
+  if (!user)
+    return res
+      .status(StatusCodes.NOT_FOUND)
+      .send({ message: "User is not found" });
+
+  const token = nanoid();
+  const code = customAlphabet("0123456789", 6)();
+  const value = JSON.stringify({ userId: user.id, code });
+
+  await redis.set(`verify_email_${token}`, value);
+  // await sendMail({ user, subject: "Change Password", token });
+
+  return res.status(StatusCodes.OK).send({
+    message: `Success to send email for verify your email`,
+    token,
+    code,
+  });
+}
+
+export async function verifyEmailHandler(
+  req: Request<{}, {}, VerifyEmailInput["body"], VerifyEmailInput["query"]>,
+  res: Response
+) {
+  const redis = res.locals.redis as Redis;
+  const { code } = req.body;
+  const { token } = req.query;
+
+  const key = `verify_email_${token}`;
+  const value = await redis.get(key);
+  if (!value)
+    return res
+      .status(StatusCodes.NOT_FOUND)
+      .send({ message: "Token already expired" });
+
+  // !FIX: change the way of value defined
+  const { userId, code: storedCode } = JSON.parse(value!);
+  if (code !== storedCode)
+    return res.status(StatusCodes.FORBIDDEN).send({ message: "Invalid code" });
+
+  updateUser({ id: userId }, { isValidEmail: true });
+  await redis.del(key);
+
+  return res.status(StatusCodes.OK).send({
+    message: "Success to verify a email",
   });
 }

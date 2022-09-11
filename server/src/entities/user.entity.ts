@@ -36,6 +36,9 @@ export class User extends BaseEntity {
   @Column({ length: 40, unique: true })
   email: string;
 
+  @Column({ name: "is_valid_email", default: false })
+  isValidEmail: boolean;
+
   @Column()
   password: string;
 
@@ -69,7 +72,6 @@ export class User extends BaseEntity {
   private tempPassword: string;
   @AfterLoad()
   private loadTempPassword() {
-    console.log("AFTER LOAD");
     this.tempPassword = this.password;
   }
 
@@ -82,7 +84,6 @@ export class User extends BaseEntity {
   @BeforeInsert()
   @BeforeUpdate()
   private async encryptPassword() {
-    console.log("BEFORE INSERT & UPDATE");
     const user = this as User;
 
     if (this.tempPassword !== this.password) {
@@ -99,7 +100,6 @@ export class User extends BaseEntity {
   }
 
   changePassword(newPassword: string) {
-    console.log("CHANGE PASSWORD");
     const user = this as User;
     user.password = newPassword;
   }

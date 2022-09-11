@@ -32,7 +32,6 @@ export const initializeDataSource = async () => {
     await AppDataSource.initialize();
     logger.info("Data Source has been initialized!");
   } catch (err: any) {
-    console.log(err);
     logger.error("Error during Data Source initialization:", err);
     process.exit(1);
   }

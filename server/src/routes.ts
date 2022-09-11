@@ -13,12 +13,16 @@ import {
   forgotPasswordHandler,
   meUserHandler,
   updateUserHandler,
+  validateEmailHandler,
+  verifyEmailHandler,
 } from "./controllers/user.controller";
 import {
   changePasswordSchema,
   createUserSchema,
   forgotPasswordSchema,
   updateUserSchema,
+  validateEmailSchema,
+  verifyEmailSchema,
 } from "./schemas/user.schema";
 import { requireUser } from "./middlewares/requireUser";
 import {
@@ -59,6 +63,16 @@ export function routes(app: Express) {
     "/api/users/change-password",
     validateResources(changePasswordSchema),
     changePasswordHandler
+  );
+  app.get(
+    "/api/users/validate-email",
+    validateResources(validateEmailSchema),
+    validateEmailHandler
+  );
+  app.patch(
+    "/api/users/verify-email",
+    validateResources(verifyEmailSchema),
+    verifyEmailHandler
   );
 
   app.post(
