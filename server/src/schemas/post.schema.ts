@@ -19,8 +19,8 @@ export const body = {
         name: z
           .string({ required_error: "Name is required" })
           .max(100, { message: "Must be 100 or fewer characters long" }),
-        imageUrls: itemImageSchema.array(),
-        characteristics: itemCharacteristicSchema.array(),
+        imageUrls: itemImageSchema.array().optional(),
+        characteristics: itemCharacteristicSchema.array().optional(),
       })
       .deepPartial(),
   }),
@@ -56,7 +56,12 @@ export const updatePostSchema = z.object({
   ...body,
 });
 
+export const deletePostSchema = z.object({
+  ...params,
+});
+
 export type CreatePostInput = z.TypeOf<typeof createPostSchema>;
 export type GetPostInput = z.TypeOf<typeof getPostSchema>;
 export type GetPostsInput = z.TypeOf<typeof getPostsSchema>;
 export type UpdatePostInput = z.TypeOf<typeof updatePostSchema>;
+export type DeletePostInput = z.TypeOf<typeof deletePostSchema>;

@@ -16,7 +16,6 @@ import connectRedis from "connect-redis";
 configDotEnv();
 
 const app = express();
-
 const redis = new Redis({
   host: "0.0.0.0",
   port: 6379,

@@ -1,6 +1,7 @@
 import { logger } from "./../utils/logger";
 import {
   CreatePostInput,
+  DeletePostInput,
   GetPostInput,
   GetPostsInput,
   UpdatePostInput,
@@ -10,6 +11,7 @@ import { Request, Response } from "express";
 import { createItem, updateItem } from "../services/item.service";
 import {
   createPost,
+  deletePost,
   findPost,
   findPosts,
   updatePost,
@@ -43,7 +45,7 @@ export async function getPostHandler(
   if (!post)
     return res
       .status(StatusCodes.NOT_FOUND)
-      .send({ message: "Post is not found" });
+      .send({ message: "There's no post with that id" });
 
   await updatePost({ id: post.id }, { viewCount: post.viewCount + 1 });
 
@@ -70,12 +72,12 @@ export async function updatePostHandler(
   if (!post)
     return res
       .status(StatusCodes.NOT_FOUND)
-      .send({ message: "there's no post with that id" });
+      .send({ message: "There's no post with that id" });
 
   if (post.user.id !== userId)
     return res
       .status(StatusCodes.FORBIDDEN)
-      .send({ message: "you're not have access to this resources" });
+      .send({ message: "You're not have access to this resources" });
 
   if (req.body.hasOwnProperty("item")) {
     await updateItem({ id: post.item.id }, req.body.item);
@@ -85,5 +87,22 @@ export async function updatePostHandler(
 
   await updatePost({ id: postId }, updatePostInput);
 
-  return res.status(StatusCodes.OK).send({ message: "success updating post" });
+  return res.status(StatusCodes.OK).send({ message: "Success updating post" });
+}
+
+export async function deletePostHandler(
+  req: Request<DeletePostInput["params"]>,
+  res: Response
+) {
+  const { postId } = req.params;
+
+  const post = await findPost({ where: { id: postId } });
+  if (!post)
+    return res
+      .status(StatusCodes.NOT_FOUND)
+      .send({ message: "There's no post with that id" });
+
+  await deletePost({ id: post.id });
+
+  return res.status(StatusCodes.OK).send({ message: "Success deleting post" });
 }

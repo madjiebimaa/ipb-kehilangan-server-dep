@@ -11,6 +11,7 @@ import {
   changePasswordHandler,
   createUserHandler,
   forgotPasswordHandler,
+  getUsersHandler,
   meUserHandler,
   updateUserHandler,
   validateEmailHandler,
@@ -27,16 +28,20 @@ import {
 import { requireUser } from "./middlewares/requireUser";
 import {
   createPostHandler,
+  deletePostHandler,
   getPostHandler,
   getPostsHandler,
   updatePostHandler,
 } from "./controllers/post.controller";
 import {
   createPostSchema,
+  deletePostSchema,
   getPostSchema,
   getPostsSchema,
   updatePostSchema,
 } from "./schemas/post.schema";
+import { requireAdminRole } from "./middlewares/requireAdminRole";
+import { requireCivitasRole } from "./middlewares/requireCivitasRole";
 
 export function routes(app: Express) {
   app.get("/api/healthcheck", (_: Request, res: Response) =>
@@ -48,7 +53,7 @@ export function routes(app: Express) {
     validateResources(createUserSchema),
     createUserHandler
   );
-  app.get("/api/users", requireUser, meUserHandler);
+  app.get("/api/users/me", requireUser, meUserHandler);
   app.put(
     "/api/users",
     [requireUser, validateResources(updateUserSchema)],
@@ -74,6 +79,7 @@ export function routes(app: Express) {
     validateResources(verifyEmailSchema),
     verifyEmailHandler
   );
+  app.get("/api/users", [requireUser, requireAdminRole], getUsersHandler);
 
   app.post(
     "/api/sessions",
@@ -85,7 +91,7 @@ export function routes(app: Express) {
 
   app.post(
     "/api/posts",
-    [requireUser, validateResources(createPostSchema)],
+    [requireUser, requireCivitasRole, validateResources(createPostSchema)],
     createPostHandler
   );
   app.get(
@@ -98,5 +104,10 @@ export function routes(app: Express) {
     "/api/posts/:postId",
     [requireUser, validateResources(updatePostSchema)],
     updatePostHandler
+  );
+  app.delete(
+    "/api/posts/:postId",
+    [requireUser, requireAdminRole, validateResources(deletePostSchema)],
+    deletePostHandler
   );
 }

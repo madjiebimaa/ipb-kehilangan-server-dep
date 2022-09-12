@@ -6,7 +6,7 @@ export const requireUser = (_: Request, res: Response, next: NextFunction) => {
   if (!user) {
     return res
       .status(StatusCodes.FORBIDDEN)
-      .send({ message: "user does not have access" });
+      .send({ message: "User does not have access" });
   }
 
   return next();

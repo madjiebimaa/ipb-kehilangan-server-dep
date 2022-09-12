@@ -33,3 +33,7 @@ export async function updatePost(
 ) {
   return await Post.update(query, update);
 }
+
+export async function deletePost(query: FindOptionsWhere<Post>) {
+  return await Post.delete(query);
+}

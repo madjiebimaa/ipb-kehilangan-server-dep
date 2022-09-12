@@ -13,6 +13,7 @@ import {
   changeUserPassword,
   createUser,
   findUser,
+  findUsers,
   updateUser,
 } from "../services/user.service";
 import { logger } from "../utils/logger";
@@ -132,7 +133,7 @@ export async function validateEmailHandler(
   const value = JSON.stringify({ userId: user.id, code });
 
   await redis.set(`verify_email_${token}`, value);
-  // await sendMail({ user, subject: "Change Password", token });
+  // await sendMail({ user, subject: "Verify Email ", token });
 
   return res.status(StatusCodes.OK).send({
     message: `Success to send email for verify your email`,
@@ -167,4 +168,9 @@ export async function verifyEmailHandler(
   return res.status(StatusCodes.OK).send({
     message: "Success to verify a email",
   });
+}
+
+export async function getUsersHandler(_: Request, res: Response) {
+  const users = await findUsers();
+  return res.status(StatusCodes.OK).send(users);
 }
