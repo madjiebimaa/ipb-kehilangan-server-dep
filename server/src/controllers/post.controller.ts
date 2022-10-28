@@ -57,6 +57,10 @@ export async function getPostsHandler(
   res: Response
 ) {
   const posts = await findPosts({ where: { ...req.query } });
+  if (posts.length === 0)
+    return res
+      .status(StatusCodes.NOT_FOUND)
+      .send({ message: "There's no post at all" });
 
   return res.status(StatusCodes.OK).send(posts);
 }

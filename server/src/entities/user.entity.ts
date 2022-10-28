@@ -71,19 +71,19 @@ export class User extends BaseEntity {
 
   private tempPassword: string;
   @AfterLoad()
-  private loadTempPassword() {
+  private _loadTempPassword() {
     this.tempPassword = this.password;
   }
 
   @BeforeInsert()
-  private setId() {
+  private _setId() {
     const user = this as User;
     user.id = `user_${nanoid()}`;
   }
 
   @BeforeInsert()
   @BeforeUpdate()
-  private async encryptPassword() {
+  private async _encryptPassword() {
     const user = this as User;
 
     if (this.tempPassword !== this.password) {

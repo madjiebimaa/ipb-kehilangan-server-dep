@@ -19,6 +19,7 @@ import {
 import { logger } from "../utils/logger";
 import { nanoid, customAlphabet } from "nanoid";
 import { sendMail } from "../utils/mail";
+import { isEmptyArray, isEmptyObject } from "../utils/db";
 
 export async function createUserHandler(
   req: Request<{}, {}, CreateUserInput["body"]>,
@@ -31,14 +32,15 @@ export async function createUserHandler(
   } catch (err: any) {
     logger.error("Error location is createUserHandler handler:", err);
 
-    return res.status(StatusCodes.BAD_REQUEST).send({ message: err.message });
+    return res.status(StatusCodes.CONFLICT).send({ message: err.message });
   }
 }
 
 export async function meUserHandler(_: Request, res: Response) {
   const userId = res.locals.user.id;
   const user = await findUser({ where: { id: userId } });
-  if (!user)
+
+  if (isEmptyObject(user))
     return res
       .status(StatusCodes.NOT_FOUND)
       .send({ message: "User is not found" });
@@ -53,7 +55,8 @@ export async function updateUserHandler(
   const userId = res.locals.user.id;
 
   const user = await findUser({ where: { id: userId } });
-  if (!user)
+
+  if (isEmptyObject(user))
     return res
       .status(StatusCodes.NOT_FOUND)
       .send({ message: "User is not found" });
@@ -71,7 +74,7 @@ export async function forgotPasswordHandler(
   const { email } = req.body;
 
   const user = await findUser({ where: { email } });
-  if (!user)
+  if (isEmptyObject(user))
     return res
       .status(StatusCodes.NOT_FOUND)
       .send({ message: "User is not found" });
@@ -123,7 +126,7 @@ export async function validateEmailHandler(
   const { email } = req.body;
 
   const user = await findUser({ where: { email } });
-  if (!user)
+  if (isEmptyObject(user))
     return res
       .status(StatusCodes.NOT_FOUND)
       .send({ message: "User is not found" });
@@ -172,5 +175,6 @@ export async function verifyEmailHandler(
 
 export async function getUsersHandler(_: Request, res: Response) {
   const users = await findUsers();
+
   return res.status(StatusCodes.OK).send(users);
 }

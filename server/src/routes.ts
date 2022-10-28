@@ -1,3 +1,4 @@
+import { requireUserRole } from "./middlewares/requireRoleRole";
 import { createUserSessionSchema } from "./schemas/session.schema";
 import { validateResources } from "./middlewares/validateResources";
 import { Express, Request, Response } from "express";
@@ -40,8 +41,7 @@ import {
   getPostsSchema,
   updatePostSchema,
 } from "./schemas/post.schema";
-import { requireAdminRole } from "./middlewares/requireAdminRole";
-import { requireCivitasRole } from "./middlewares/requireCivitasRole";
+import { UserRoles } from "./entities/user.entity";
 
 export function routes(app: Express) {
   app.get("/api/healthcheck", (_: Request, res: Response) =>
@@ -79,7 +79,11 @@ export function routes(app: Express) {
     validateResources(verifyEmailSchema),
     verifyEmailHandler
   );
-  app.get("/api/users", [requireUser, requireAdminRole], getUsersHandler);
+  app.get(
+    "/api/users",
+    [requireUser, requireUserRole(UserRoles.Admin)],
+    getUsersHandler
+  );
 
   app.post(
     "/api/sessions",
@@ -91,7 +95,11 @@ export function routes(app: Express) {
 
   app.post(
     "/api/posts",
-    [requireUser, requireCivitasRole, validateResources(createPostSchema)],
+    [
+      requireUser,
+      requireUserRole(UserRoles.Civitas),
+      validateResources(createPostSchema),
+    ],
     createPostHandler
   );
   app.get(
@@ -107,7 +115,11 @@ export function routes(app: Express) {
   );
   app.delete(
     "/api/posts/:postId",
-    [requireUser, requireAdminRole, validateResources(deletePostSchema)],
+    [
+      requireUser,
+      requireUserRole(UserRoles.Admin),
+      validateResources(deletePostSchema),
+    ],
     deletePostHandler
   );
 }
