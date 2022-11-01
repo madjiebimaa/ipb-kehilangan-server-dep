@@ -1,6 +1,8 @@
 import { StatusCodes } from "http-status-codes";
+import Redis from "ioredis";
 import { nanoid } from "nanoid";
 import supertest from "supertest";
+import { object } from "zod";
 import * as userService from "../services/user.service";
 import { signJwt } from "../utils/jwt";
 import { createServer } from "../utils/server";
@@ -32,6 +34,9 @@ export const userPayload = {
   createdAt: "2022-09-12T08:26:57.246Z",
   updatedAt: "2022-09-12T08:26:57.246Z",
 };
+
+const redis = require('redis-mock');
+const client = redis.createClient();
 
 export const adminInput = { ...userInput, role: "admin" };
 export const adminPayload = { ...userPayload, role: "admin" };
@@ -228,14 +233,56 @@ describe("user", () => {
   });
 
   describe("change password", () => {
-    // describe()
+    describe("user not found", () => {
+      it("should return 404 status code", async () => {
+        const new_password = "a";
+
+        const findUserServiceMock = jest.spyOn(userService, "changeUserPassword");
+        
+        const { statusCode } = await supertest(app)
+          .get("/api/users/change-password")
+          .send(new_password);
+
+        expect(statusCode).toBe(StatusCodes.NOT_FOUND);
+        expect(findUserServiceMock).not.toHaveBeenCalled();
+      })
+    })
+
+    describe("password doesn't follow the rules", () => {
+      it("should return 401 status code", async() => {
+        client.set();
+
+        const given_password = "a";
+
+        const findUserServiceMock = jest.spyOn(Redis, "get");
+        
+        const { statusCode } = await supertest(app)
+          .get("/api/users/change-password")
+          .send(given_password).query({token : client});
+
+        expect(statusCode).toBe(StatusCodes.BAD_REQUEST);
+        expect(findUserServiceMock).not.toHaveBeenCalled();
+      })
+    })
   });
 
-  describe("validate email", () => {});
+  describe("validate email", () => {
+    describe("given invalid email", () => {
+      it("should return 400 status code", async () => {
+        const invalidEmail = "email";
+
+        const findUserServiceMock = jest.spyOn(userService, "findUser");
+
+        const { statusCode } = await supertest(app)
+          .get("/api/users/forgot-password")
+          .send(invalidEmail);
+
+        expect(statusCode).toBe(StatusCodes.BAD_REQUEST);
+        expect(findUserServiceMock).not.toHaveBeenCalled();
+      });
+  });
 
   describe("verify email", () => {});
-
-  describe("validate email", () => {});
 
   describe("get users", () => {
     describe("given user is not logged in", () => {
